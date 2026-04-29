@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExpenseSpy – Snap a receipt. Done.</title>
+<meta name="description" content="ExpenseSpy automatically reads your receipts and exports them to Excel, CSV or PDF. Available on iOS and Android.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2352F5;
+    --blue-mid: #1a3fd4;
+    --navy: #060E2B;
+    --white: #FFFFFF;
+    --gray: #64748B;
+    --gray-light: #94A3B8;
+    --border: #E2E8F0;
+    --bg: #F8FAFC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    padding: 0 48px; height: 62px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-icon { width: 34px; height: 34px; border-radius: 9px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .nav-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nav-name { font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--gray); text-decoration: none; font-weight: 400; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-cta { background: var(--blue); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+  .nav-cta:hover { background: var(--blue-mid); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(155deg, #1a3fd4 0%, #0F2494 50%, #060E2B 100%);
+    min-height: 100vh; padding: 120px 48px 80px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -120px; right: -120px; width: 480px; height: 480px; background: rgba(255,255,255,0.04); border-radius: 50%; pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 8%; width: 320px; height: 320px; background: rgba(35,82,245,0.12); border-radius: 50%; pointer-events: none; }
+  .hero-inner { max-width: 1080px; width: 100%; display: grid; grid-template-columns: 1fr 400px; gap: 60px; align-items: center; position: relative; z-index: 2; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
+  .hero-text h1 { font-size: 58px; font-weight: 800; line-height: 1.08; color: white; letter-spacing: -1.5px; margin-bottom: 20px; }
+  .hero-text h1 em { font-style: normal; color: #7DA6FF; }
+  .hero-text p { font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.6); line-height: 1.75; margin-bottom: 36px; max-width: 420px; }
+  .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-store { display: flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 12px; font-size: 14px; font-weight: 500; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-store:hover { transform: translateY(-2px); }
+  .btn-store.light { background: white; color: var(--navy); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+  .btn-store.light:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .btn-store.dark { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22); color: white; }
+  .btn-store.dark:hover { background: rgba(255,255,255,0.16); }
+  .btn-lbl { font-size: 10px; font-weight: 400; opacity: 0.6; display: block; }
+  .btn-nm { font-size: 14px; font-weight: 600; display: block; line-height: 1.2; }
+  .hero-stats { display: flex; gap: 36px; margin-top: 44px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .hero-stat .num { font-size: 26px; font-weight: 700; color: white; letter-spacing: -0.5px; }
+  .hero-stat .lbl { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; font-weight: 400; }
+  .hero-phone { display: flex; justify-content: center; align-items: center; }
+  .phone-shell { width: 100%; max-width: 230px; background: #080C1A; border: 2px solid rgba(255,255,255,0.1); border-radius: 44px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(35,82,245,0.25); position: relative; }
+  .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 88px; height: 24px; background: #080C1A; border-radius: 0 0 18px 18px; z-index: 5; }
+  .phone-shell img { width: 100%; display: block; }
+
+  /* SECTION COMMONS */
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+  .section-head { text-align: center; max-width: 560px; margin: 0 auto 60px; }
+  .section-head h2 { font-size: 38px; font-weight: 800; color: var(--navy); margin-bottom: 14px; line-height: 1.15; letter-spacing: -0.8px; }
+  .section-head p { font-size: 16px; color: var(--gray); line-height: 1.75; font-weight: 300; }
+
+  /* FEATURES */
+  .features { padding: 100px 48px; background: var(--bg); }
+  .features-grid { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card { background: white; border-radius: 18px; border: 1px solid var(--border); padding: 28px 24px; transition: transform 0.2s, box-shadow 0.2s; }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+  .f-icon { width: 46px; height: 46px; border-radius: 12px; background: #EFF6FF; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
+  .feature-card h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 8px; letter-spacing: -0.2px; }
+  .feature-card p { font-size: 14px; color: var(--gray); line-height: 1.7; font-weight: 300; }
+
+  /* SCREENSHOTS */
+  .screenshots { padding: 100px 0; background: white; }
+  .screenshots .section-head { padding: 0 48px; }
+  .screens-track { display: flex; gap: 16px; padding: 36px 60px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .screens-track::-webkit-scrollbar { display: none; }
+  .screen-card { flex-shrink: 0; width: 180px; }
+  .screen-shell { background: #080C1A; border: 1.5px solid rgba(0,0,0,0.09); border-radius: 30px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.1); position: relative; }
+  .screen-shell::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70px; height: 20px; background: #080C1A; border-radius: 0 0 13px 13px; z-index: 5; }
+  .screen-shell img { width: 100%; display: block; }
+  .screen-lbl { font-size: 12px; font-weight: 500; color: var(--gray-light); text-align: center; margin-top: 10px; }
+
+  /* HOW IT WORKS */
+  .how { padding: 100px 48px; background: var(--bg); }
+  .steps { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 27px; left: 12%; right: 12%; height: 1.5px; background: var(--border); }
+  .step { text-align: center; position: relative; z-index: 1; }
+  .step-bubble { width: 54px; height: 54px; border-radius: 50%; background: white; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .step h4 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.2px; }
+  .step p { font-size: 12px; color: var(--gray); line-height: 1.6; font-weight: 300; }
+
+  /* PRICING */
+  .pricing { padding: 100px 48px; background: white; }
+  .pricing-row { max-width: 780px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .p-card { border: 1.5px solid var(--border); border-radius: 18px; padding: 28px 22px; text-align: center; position: relative; transition: transform 0.2s; }
+  .p-card:hover { transform: translateY(-3px); }
+  .p-card.featured { border-color: var(--blue); background: #F0F5FF; }
+  .p-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--blue); color: white; font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .p-tier { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-light); margin-bottom: 10px; }
+  .p-price { font-size: 42px; font-weight: 800; color: var(--navy); letter-spacing: -1px; margin-bottom: 2px; }
+  .p-price sup { font-size: 20px; vertical-align: super; font-weight: 700; }
+  .p-period { font-size: 12px; color: var(--gray-light); margin-bottom: 16px; }
+  .p-desc { font-size: 13px; color: var(--gray); line-height: 1.65; font-weight: 300; }
+
+  /* CTA */
+  .cta { background: linear-gradient(135deg, #1a3fd4 0%, #060E2B 100%); padding: 90px 48px; text-align: center; }
+  .cta h2 { font-size: 44px; font-weight: 800; color: white; letter-spacing: -1px; margin-bottom: 14px; }
+  .cta p { font-size: 17px; color: rgba(255,255,255,0.55); margin-bottom: 40px; font-weight: 300; }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* PRIVACY */
+  .privacy { padding: 90px 48px; background: var(--bg); }
+  .privacy-wrap { max-width: 720px; margin: 0 auto; }
+  .privacy-wrap h2 { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 6px; }
+  .updated { font-size: 13px; color: var(--gray-light); margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .priv-note { background: #EFF6FF; border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 32px; font-size: 14px; color: #334155; }
+  .privacy-wrap h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin: 32px 0 10px; letter-spacing: -0.2px; }
+  .privacy-wrap p { font-size: 14px; color: #475569; line-height: 1.8; margin-bottom: 12px; font-weight: 300; }
+  .privacy-wrap ul { font-size: 14px; color: #475569; padding-left: 20px; margin-bottom: 12px; font-weight: 300; }
+  .privacy-wrap ul li { margin-bottom: 7px; line-height: 1.7; }
+  .privacy-wrap a { color: var(--blue); text-decoration: none; }
+
+  /* FOOTER */
+  footer { background: var(--navy); padding: 32px 48px; text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; font-weight: 300; }
+  footer a { color: rgba(255,255,255,0.45); text-decoration: none; }
+  footer a:hover { color: white; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-text h1 { font-size: 38px; }
+    .hero-phone { display: none; }
+    .hero-stats { gap: 24px; }
+    .features { padding: 72px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .how { padding: 72px 24px; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .pricing { padding: 72px 24px; }
+    .pricing-row { grid-template-columns: 1fr; }
+    .cta { padding: 72px 24px; }
+    .cta h2 { font-size: 32px; }
+    .privacy { padding: 72px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="nav-icon"><img src="icon.png" alt="ExpenseSpy"></div>
+    <span class="nav-name">ExpenseSpy</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#download" class="nav-cta">Download free</a>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">✦ iOS & Android</div>
+      <h1>Snap a receipt.<br><em>Done.</em></h1>
+      <p>AI reads your receipts automatically. You approve, export to Excel — and move on.</p>
+      <div class="hero-buttons">
+        <a href="#download" class="btn-store light">
+          <span style="font-size:22px; line-height:1;">🍎</span>
+          <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
+        </a>
+        <a href="#download" class="btn-store dark">
+          <span style="font-size:20px; line-height:1;">▶</span>
+          <span><span class="btn-lbl">Get it on</span><span class="btn-nm">Google Play</span></span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">10</div><div class="lbl">Free receipts / month</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">Export formats</div></div>
+        <div class="hero-stat"><div class="num">5+</div><div class="lbl">Currencies</div></div>
+      </div>
+    </div>
+    <div class="hero-phone">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+        <img src="icon.png" alt="ExpenseSpy icon" style="width:90px; height:90px; border-radius:22px; box-shadow: 0 12px 40px rgba(0,0,0,0.4);">
+      <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <img src="screen2.png" alt="ExpenseSpy receipt list">
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-head">
+    <div class="section-label">Features</div>
+    <h2>Everything you need.<br>Nothing you don't.</h2>
+    <p>Built for people who travel, freelancers, and anyone tired of manual expense tracking.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="f-icon">🤖</div><h3>AI Receipt Reading</h3><p>Point your camera at any receipt. Date, time, amount, merchant and items — extracted automatically.</p></div>
+    <div class="feature-card"><div class="f-icon">📊</div><h3>Excel & CSV Export</h3><p>Export as Excel, CSV or PDF in one tap. Choose summary or detailed mode for every export.</p></div>
+    <div class="feature-card"><div class="f-icon">💱</div><h3>Multi-Currency</h3><p>QAR, USD, EUR, GBP, TRY and more. Mixed currencies in the same list — each receipt keeps its own.</p></div>
+    <div class="feature-card"><div class="f-icon">🔍</div><h3>Search & Filter</h3><p>Find any receipt instantly. Filter by date, category, status or amount. Sort any way you like.</p></div>
+    <div class="feature-card"><div class="f-icon">☁️</div><h3>Cloud Sync</h3><p>Receipts backed up and synced across all your devices. Switch phones without losing anything.</p></div>
+    <div class="feature-card"><div class="f-icon">🏷️</div><h3>Smart Categories</h3><p>AI suggests the right category — Food, Transport, Shopping and more. Edit anytime.</p></div>
+  </div>
+</section>
+
+<section class="screenshots" id="screenshots">
+  <div class="section-head">
+    <div class="section-label">See it in action</div>
+    <h2>Clean. Fast. Intuitive.</h2>
+  </div>
+  <div class="screens-track">
+    <div class="screen-card"><div class="screen-shell"><img src="screen1.png" alt="Launch screen"></div><div class="screen-lbl">Launch</div></div>
+    <div class="screen-card"><div class="screen-shell"><img src="screen2.png" alt="Receipt list"></div><div class="screen-lbl">Receipt list</div></div>
+    <div class="screen-card"><div class="screen-shell"><img src="screen3.png" alt="Add receipt"></div><div class="screen-lbl">Add receipt</div></div>
+    <div class="screen-card"><div class="screen-shell"><img src="screen4.png" alt="Review items"></div><div class="screen-lbl">Review items</div></div>
+    <div class="screen-card"><div class="screen-shell"><img src="screen5.png" alt="Receipt detail"></div><div class="screen-lbl">Receipt detail</div></div>
+    <div class="screen-card"><div class="screen-shell"><img src="screen6.png" alt="Settings"></div><div class="screen-lbl">Settings & plans</div></div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="section-head">
+    <div class="section-label">How it works</div>
+    <h2>Receipt to Excel in 4 steps.</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="step-bubble">📸</div><h4>Take a photo</h4><p>Camera or gallery — your choice</p></div>
+    <div class="step"><div class="step-bubble">🤖</div><h4>AI reads it</h4><p>Amount, merchant, items — auto-extracted</p></div>
+    <div class="step"><div class="step-bubble">✅</div><h4>Review & save</h4><p>Confirm or edit any field</p></div>
+    <div class="step"><div class="step-bubble">📤</div><h4>Export</h4><p>Excel, CSV or PDF — one tap</p></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="section-head">
+    <div class="section-label">Pricing</div>
+    <h2>Simple, transparent pricing.</h2>
+    <p>Start free. Upgrade when you're ready. No hidden fees.</p>
+  </div>
+  <div class="pricing-row">
+    <div class="p-card"><div class="p-tier">Free</div><div class="p-price">$0</div><div class="p-period">forever</div><div class="p-desc">Up to 10 receipts per month. All core features included.</div></div>
+    <div class="p-card featured"><div class="p-badge">Most popular</div><div class="p-tier">Monthly</div><div class="p-price"><sup>$</sup>4.99</div><div class="p-period">per month</div><div class="p-desc">Unlimited receipts. All export formats. Full access.</div></div>
+    <div class="p-card"><div class="p-tier">Yearly</div><div class="p-price"><sup>$</sup>49.99</div><div class="p-period">per year · save 17%</div><div class="p-desc">Everything in Monthly. Best value for regular use.</div></div>
+  </div>
+</section>
+
+<section class="cta" id="download">
+  <h2>Start for free today.</h2>
+  <p>10 receipts free every month. No credit card required.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-store light">
+      <span style="font-size:22px; line-height:1;">🍎</span>
+      <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
+    </a>
+    <a href="#" class="btn-store dark">
+      <span style="font-size:20px; line-height:1;">▶</span>
+      <span><span class="btn-lbl">Get it on</span><span class="btn-nm">Google Play</span></span>
+    </a>
+  </div>
+</section>
+
+<section class="privacy" id="privacy">
+  <div class="privacy-wrap">
+    <h2>Privacy Policy</h2>
+    <p class="updated">Last updated: April 29, 2026</p>
+    <div class="priv-note">Your privacy matters. ExpenseSpy collects only what's necessary to deliver the service. We never sell your data to third parties.</div>
+
+    <h3>1. Information We Collect</h3>
+    <ul>
+      <li><strong>Account information:</strong> Name and email (via Google/Apple Sign-In or email/password).</li>
+      <li><strong>Receipt data:</strong> Photos you upload and extracted data (date, amount, merchant, category, items).</li>
+      <li><strong>Usage data:</strong> Basic analytics to improve the product (features used, crash reports).</li>
+      <li><strong>Payment information:</strong> Subscription status via Apple App Store or Google Play. We do not store credit card details.</li>
+    </ul>
+
+    <h3>2. How We Use Your Information</h3>
+    <ul>
+      <li>Provide and maintain the ExpenseSpy service</li>
+      <li>Process receipt photos using AI/OCR technology</li>
+      <li>Sync your data securely across your devices</li>
+      <li>Manage your subscription and account</li>
+      <li>Send important service notifications (not marketing)</li>
+    </ul>
+
+    <h3>3. Receipt Photos & AI Processing</h3>
+    <p>Receipt photos are sent to OpenAI Vision API solely for data extraction. Images are not used to train AI models or shared beyond this processing. All extracted data is stored in your personal Firebase account, accessible only by you.</p>
+
+    <h3>4. Data Storage & Security</h3>
+    <ul>
+      <li>All data encrypted in transit (HTTPS/TLS)</li>
+      <li>All data encrypted at rest (Firebase / Google Cloud)</li>
+      <li>Authentication handled via Firebase Auth</li>
+      <li>We do not store passwords</li>
+    </ul>
+
+    <h3>5. Data Sharing</h3>
+    <p>We do not sell, rent, or share your data for marketing. We share data only with: Firebase/Google Cloud (storage), OpenAI (receipt processing only), RevenueCat (subscription management), and when required by law.</p>
+
+    <h3>6. Your Rights</h3>
+    <ul>
+      <li><strong>Access:</strong> View all your data in the app at any time</li>
+      <li><strong>Export:</strong> Export receipts as Excel, CSV or PDF anytime</li>
+      <li><strong>Delete:</strong> Delete individual receipts or your entire account at any time. All data permanently deleted within 30 days.</li>
+    </ul>
+
+    <h3>7. Children's Privacy</h3>
+    <p>ExpenseSpy is not directed at children under 13. We do not knowingly collect information from children under 13.</p>
+
+    <h3>8. Changes to This Policy</h3>
+    <p>We may update this policy from time to time. We will notify you of significant changes by updating the date above and via in-app notification.</p>
+
+    <h3>9. Contact</h3>
+    <p>Questions? Email us at <a href="mailto:privacy@expensespy.app">privacy@expensespy.app</a></p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 ExpenseSpy &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:privacy@expensespy.app">privacy@expensespy.app</a></p>
+</footer>
+
+</body>
+</html>
