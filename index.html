@@ -179,6 +179,7 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
     <a href="#privacy">Privacy</a>
     <a href="#download" class="nav-cta">Download free</a>
   </div>
@@ -192,7 +193,7 @@
       <p>AI reads your receipts automatically. You approve, export to Excel — and move on.</p>
       <div class="hero-buttons">
         <a href="#download" class="btn-store light">
-          <span style="font-size:22px; line-height:1;">🍎</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.78 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" fill="currentColor"/></svg>
           <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
         </a>
         <a href="#download" class="btn-store dark">
@@ -280,7 +281,7 @@
   <p>10 receipts free every month. No credit card required.</p>
   <div class="cta-btns">
     <a href="#" class="btn-store light">
-      <span style="font-size:22px; line-height:1;">🍎</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.78 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" fill="currentColor"/></svg>
       <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
     </a>
     <a href="#" class="btn-store dark">
@@ -289,6 +290,53 @@
     </a>
   </div>
 </section>
+
+<section style="padding: 90px 48px; background: white;" id="contact">
+  <div style="max-width: 600px; margin: 0 auto; text-align:center;">
+    <div class="section-label">Contact</div>
+    <h2 style="font-size:38px; font-weight:800; color:var(--navy); margin-bottom:14px; letter-spacing:-0.8px;">Get in touch</h2>
+    <p style="font-size:16px; color:var(--gray); line-height:1.75; font-weight:300; margin-bottom:40px;">Have a question or feedback? Send us a message.</p>
+    <form id="contact-form" style="display:flex; flex-direction:column; gap:16px; text-align:left;">
+      <input type="text" name="name" placeholder="Your name" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg);">
+      <input type="email" name="email" placeholder="Your email" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg);">
+      <textarea name="message" placeholder="Your message" rows="5" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg); resize:vertical;"></textarea>
+      <button type="submit" id="submit-btn" style="font-family:'Inter',sans-serif; background:var(--blue); color:white; padding:14px 28px; border-radius:12px; border:none; font-size:15px; font-weight:500; cursor:pointer;">Send Message</button>
+      <p id="form-status" style="text-align:center; font-size:14px; display:none;"></p>
+    </form>
+    <p style="margin-top:20px; font-size:13px; color:var(--gray-light); text-align:center;">You can also reach us through the app — Settings → Contact Us</p>
+  </div>
+</section>
+<script>
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const status = document.getElementById('form-status');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  const data = new FormData(this);
+  try {
+    const res = await fetch('https://formspree.io/f/xvzdenol', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      status.style.display = 'block';
+      status.style.color = '#10B981';
+      status.textContent = '✓ Message sent successfully!';
+      this.reset();
+    } else {
+      throw new Error();
+    }
+  } catch {
+    status.style.display = 'block';
+    status.style.color = '#EF4444';
+    status.textContent = 'Failed to send. Please try again.';
+  }
+  btn.textContent = 'Send Message';
+  btn.disabled = false;
+});
+</script>
 
 <section class="privacy" id="privacy">
   <div class="privacy-wrap">
@@ -341,12 +389,12 @@
     <p>We may update this policy from time to time. We will notify you of significant changes by updating the date above and via in-app notification.</p>
 
     <h3>9. Contact</h3>
-    <p>Questions? Email us at <a href="mailto:privacy@expensespy.app">privacy@expensespy.app</a></p>
+    <p>Have questions about this policy? Send us a message through the app — Settings → Contact Us.</p>
   </div>
 </section>
 
 <footer>
-  <p>© 2026 ExpenseSpy &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:privacy@expensespy.app">privacy@expensespy.app</a></p>
+  <p>© 2026 ExpenseSpy &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="#contact">Contact</a></p>
 </footer>
 
 </body>
