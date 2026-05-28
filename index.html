@@ -310,10 +310,8 @@
   <p>Get notified the moment ExpenseSpy hits the App Store and Play Store. No spam — one email, only when it's live.</p>
 
   <form id="notify-form" style="max-width: 460px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap;">
-    <input type="email" name="email" placeholder="your@email.com" required
+    <input type="email" name="email_address" placeholder="your@email.com" required
       style="flex: 1; min-width: 220px; font-family:'Inter',sans-serif; padding: 14px 18px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); color: white; font-size: 15px; outline: none;">
-    <input type="hidden" name="_subject" value="🚀 New launch waitlist signup — ExpenseSpy">
-    <input type="hidden" name="source" value="expensespy.com waitlist">
     <button type="submit" id="notify-btn"
       style="font-family:'Inter',sans-serif; padding: 14px 26px; border-radius: 12px; border: none; background: white; color: var(--navy); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.15s;">
       Notify me →
@@ -335,18 +333,19 @@ document.getElementById('notify-form').addEventListener('submit', async function
   btn.textContent = 'Sending...';
   btn.disabled = true;
   try {
-    var res = await fetch('https://formspree.io/f/xvzdenol', {
+    var res = await fetch('https://app.kit.com/forms/9492650/subscriptions', {
       method: 'POST',
       body: new FormData(this),
       headers: { 'Accept': 'application/json' }
     });
-    if (res.ok) {
+    var data = await res.json();
+    if (res.ok && (data.status === 'success' || data.status === 'quarantined')) {
       status.style.display = 'block';
       status.style.color = '#86efac';
       status.textContent = "✓ You're on the list. We'll email you the moment we launch.";
       this.reset();
     } else { throw new Error(); }
-  } catch {
+  } catch (err) {
     status.style.display = 'block';
     status.style.color = '#fca5a5';
     status.textContent = 'Something went wrong. Please try again.';
