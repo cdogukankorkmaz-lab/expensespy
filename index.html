@@ -4,29 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ExpenseSpy – Snap a receipt. Done.</title>
-<meta name="description" content="ExpenseSpy automatically reads your receipts and exports them to Excel, CSV or PDF. Coming soon to iOS and Android.">
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://expensespy.com/">
-<meta property="og:title" content="ExpenseSpy — Snap a receipt. Done.">
-<meta property="og:description" content="AI reads your receipts automatically. Export to Excel, CSV, or PDF. Coming soon to iOS & Android.">
-<meta property="og:image" content="https://expensespy.com/og.png">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:creator" content="@cdogukank">
-<meta name="twitter:site" content="@expensespyapp">
-<meta name="twitter:title" content="ExpenseSpy — Snap a receipt. Done.">
-<meta name="twitter:description" content="AI reads your receipts. Export to Excel, CSV, or PDF. Coming soon.">
-<meta name="twitter:image" content="https://expensespy.com/og.png">
-
-<link rel="canonical" href="https://expensespy.com/">
+<meta name="description" content="ExpenseSpy automatically reads your receipts and exports them to Excel, CSV or PDF. Available on iOS and Android.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -59,14 +37,14 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-icon { width: 34px; height: 34px; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .nav-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .nav-icon { width: 34px; height: 34px; border-radius: 9px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .nav-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .nav-name { font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; }
   .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a { font-size: 14px; color: var(--gray); text-decoration: none; font-weight: 400; transition: color 0.15s; }
   .nav-links a:hover { color: var(--navy); }
-  .nav-cta { background: var(--navy); color: #ffffff; padding: 9px 22px; border-radius: 20px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.15s, transform 0.15s; }
-  .nav-cta:hover { background: var(--blue); transform: translateY(-1px); }
+  .nav-cta { background: var(--blue); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+  .nav-cta:hover { background: var(--blue-mid); }
 
   /* HERO */
   .hero {
@@ -153,6 +131,23 @@
   .cta p { font-size: 17px; color: rgba(255,255,255,0.55); margin-bottom: 40px; font-weight: 300; }
   .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
+  /* FAQ */
+  .faq { padding: 100px 48px; background: var(--bg); }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-item { background: white; border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; }
+  .faq-item[open] { border-color: #C7D7FE; box-shadow: 0 8px 28px rgba(35,82,245,0.07); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 16px; font-weight: 600; color: var(--navy); letter-spacing: -0.2px; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:hover { color: var(--blue); }
+  .faq-chevron { flex-shrink: 0; width: 20px; height: 20px; color: var(--gray-light); transition: transform 0.25s ease, color 0.2s; }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); color: var(--blue); }
+  .faq-body { padding: 0 24px 22px; }
+  .faq-body p { font-size: 14.5px; color: #475569; line-height: 1.8; font-weight: 300; }
+  .faq-body a { color: var(--blue); text-decoration: none; font-weight: 400; }
+  .faq-body a:hover { text-decoration: underline; }
+  @keyframes faqReveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .faq-item[open] .faq-body { animation: faqReveal 0.25s ease; }
+
   /* PRIVACY */
   .privacy { padding: 90px 48px; background: var(--bg); }
   .privacy-wrap { max-width: 720px; margin: 0 auto; }
@@ -186,6 +181,7 @@
     .pricing-row { grid-template-columns: 1fr; }
     .cta { padding: 72px 24px; }
     .cta h2 { font-size: 32px; }
+    .faq { padding: 72px 24px; }
     .privacy { padding: 72px 24px; }
   }
 </style>
@@ -201,26 +197,28 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
     <a href="#privacy">Privacy</a>
-    <a href="#notify" class="nav-cta">Notify me</a>
+    <a href="#download" class="nav-cta">Download free</a>
   </div>
 </nav>
 
 <section class="hero" id="home">
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="eyebrow">✦ Coming soon · iOS &amp; Android</div>
+      <div class="eyebrow">✦ iOS & Android</div>
       <h1>Snap a receipt.<br><em>Done.</em></h1>
       <p>AI reads your receipts automatically. You approve, export to Excel — and move on.</p>
       <div class="hero-buttons">
-        <a href="#notify" class="btn-store light">
-          <span style="font-size:18px; line-height:1;">✉</span>
-          <span><span class="btn-lbl">Get launch notification</span><span class="btn-nm">Be first to know</span></span>
+        <a href="#download" class="btn-store light">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.78 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" fill="currentColor"/></svg>
+          <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
         </a>
-      </div>
-      <div style="margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 300;">
-        🛠 Apple Sign-In review in progress · Launching very soon
+        <a href="#download" class="btn-store dark">
+          <span style="font-size:20px; line-height:1;">▶</span>
+          <span><span class="btn-lbl">Get it on</span><span class="btn-nm">Google Play</span></span>
+        </a>
       </div>
       <div class="hero-stats">
         <div class="hero-stat"><div class="num">10</div><div class="lbl">Free receipts / month</div></div>
@@ -230,7 +228,7 @@
     </div>
     <div class="hero-phone">
       <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
-        <img src="icon.png" alt="ExpenseSpy icon" style="width:90px; height:90px; border-radius:20px; box-shadow: 0 8px 24px rgba(35,82,245,0.35);">
+        <img src="icon.png" alt="ExpenseSpy icon" style="width:90px; height:90px; border-radius:22px; box-shadow: 0 12px 40px rgba(0,0,0,0.4);">
       <div class="phone-shell">
         <div class="phone-notch"></div>
         <img src="screen2.png" alt="ExpenseSpy receipt list">
@@ -297,69 +295,80 @@
   </div>
 </section>
 
-<section style="padding: 100px 48px; background: var(--bg);" id="founder">
-  <div style="max-width: 640px; margin: 0 auto;">
-    <div class="section-label">Behind the app</div>
-    <h2 style="font-size:38px; font-weight:800; color:var(--navy); margin-bottom:24px; line-height:1.15; letter-spacing:-0.8px;">Built by one person.</h2>
-    <p style="font-size:16px; color:var(--gray); line-height:1.75; font-weight:300; margin-bottom:16px;">Hi, I'm Dogukan. I built ExpenseSpy solo &mdash; design, code, support, all of it. It's the first app from <a href="https://dlzlabs.app" style="color:var(--blue); text-decoration:none; font-weight:500;">DLZ Labs</a>, my one-person studio. More apps coming.</p>
-    <p style="font-size:16px; color:var(--gray); line-height:1.75; font-weight:300; margin-bottom:0;">If something breaks or you want a feature, write to me directly. There's no team to forward it to.</p>
-    <div style="margin-top:28px; padding-top:22px; border-top:1px solid var(--border); display:flex; gap:24px; flex-wrap:wrap; align-items:center; font-size:14px;">
-      <a href="https://twitter.com/cdogukank" style="color:var(--gray); text-decoration:none;">𝕏 @cdogukank</a>
-      <a href="https://dlzlabs.app" style="color:var(--gray); text-decoration:none;">&rarr; Part of DLZ Labs</a>
-      <a href="https://www.producthunt.com/products/expensespy?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-expensespy" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center;"><img alt="ExpenseSpy on Product Hunt" width="180" height="40" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1158010&amp;theme=neutral&amp;t=1780045140851"></a>
-    </div>
+<section class="faq" id="faq">
+  <div class="section-head">
+    <div class="section-label">FAQ</div>
+    <h2>Questions, answered.</h2>
+    <p>Everything you might want to know before your first receipt.</p>
+  </div>
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>What's included in the free plan?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Up to 10 receipts every month, with every core feature included — AI receipt reading, multi-currency, search, categories and all three export formats. No trial timer, no feature locked behind a paywall. When you need more than 10 receipts in a month, that's when a subscription makes sense.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How does the receipt scanning actually work?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Point your camera at a receipt (or pick a photo from your gallery). The AI reads the date, total, merchant, category and line items, then hands them back to you to confirm or edit. You stay in control of every field before anything is saved.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Which export formats do you support?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Excel, CSV and PDF — exported in one tap. You can choose a summary view or a detailed line-by-line breakdown for each export, so the file is ready to hand to a client, an accountant, or your own spreadsheet.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I track receipts in different currencies?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Yes. USD, EUR, GBP, TRY, QAR and more are supported, and you can mix currencies in the same list — each receipt keeps its own. It's built for people who travel or invoice clients across borders.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Is it available on both iOS and Android?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Yes — ExpenseSpy runs on both the App Store and Google Play. Your receipts sync securely across your devices, so you can scan on one phone and export from another without losing anything.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What happens to my receipt photos and data?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Your data is yours. We collect only what's needed to run the service and never sell it to third parties. You can view, export or delete everything at any time. The full details are in our <a href="#privacy">Privacy Policy</a>.</p></div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I cancel anytime?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="faq-body"><p>Anytime, directly through your App Store or Google Play subscription settings. No emails, no hoops. If you cancel, you simply drop back to the free plan and keep your existing receipts.</p></div>
+    </details>
+
   </div>
 </section>
 
-<section class="cta" id="notify">
-  <h2>Be first when we launch.</h2>
-  <p>Get notified the moment ExpenseSpy hits the App Store and Play Store. No spam — one email, only when it's live.</p>
-
-  <form id="notify-form" style="max-width: 460px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap;">
-    <input type="email" name="email_address" placeholder="your@email.com" required
-      style="flex: 1; min-width: 220px; font-family:'Inter',sans-serif; padding: 14px 18px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); color: white; font-size: 15px; outline: none;">
-    <button type="submit" id="notify-btn"
-      style="font-family:'Inter',sans-serif; padding: 14px 26px; border-radius: 12px; border: none; background: white; color: var(--navy); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.15s;">
-      Notify me →
-    </button>
-  </form>
-  <p id="notify-status" style="margin-top: 18px; font-size: 14px; display: none;"></p>
-
-  <div style="margin-top: 28px; font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300;">
-    🔒 Your email is used only for the launch notification. No marketing emails.
+<section class="cta" id="download">
+  <h2>Start for free today.</h2>
+  <p>10 receipts free every month. No credit card required.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-store light">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.78 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" fill="currentColor"/></svg>
+      <span><span class="btn-lbl">Download on the</span><span class="btn-nm">App Store</span></span>
+    </a>
+    <a href="#" class="btn-store dark">
+      <span style="font-size:20px; line-height:1;">▶</span>
+      <span><span class="btn-lbl">Get it on</span><span class="btn-nm">Google Play</span></span>
+    </a>
   </div>
 </section>
-
-<script>
-document.getElementById('notify-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  var btn = document.getElementById('notify-btn');
-  var status = document.getElementById('notify-status');
-  var originalText = btn.textContent;
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-  try {
-    var res = await fetch('https://app.kit.com/forms/9492650/subscriptions', {
-      method: 'POST',
-      body: new FormData(this),
-      headers: { 'Accept': 'application/json' }
-    });
-    var data = await res.json();
-    if (res.ok && (data.status === 'success' || data.status === 'quarantined')) {
-      status.style.display = 'block';
-      status.style.color = '#86efac';
-      status.textContent = "✓ You're on the list. We'll email you the moment we launch.";
-      this.reset();
-    } else { throw new Error(); }
-  } catch (err) {
-    status.style.display = 'block';
-    status.style.color = '#fca5a5';
-    status.textContent = 'Something went wrong. Please try again.';
-  }
-  btn.textContent = originalText;
-  btn.disabled = false;
-});
-</script>
 
 <section style="padding: 90px 48px; background: white;" id="contact">
   <div style="max-width: 600px; margin: 0 auto; text-align:center;">
@@ -367,8 +376,6 @@ document.getElementById('notify-form').addEventListener('submit', async function
     <h2 style="font-size:38px; font-weight:800; color:var(--navy); margin-bottom:14px; letter-spacing:-0.8px;">Get in touch</h2>
     <p style="font-size:16px; color:var(--gray); line-height:1.75; font-weight:300; margin-bottom:40px;">Have a question or feedback? Send us a message.</p>
     <form id="contact-form" style="display:flex; flex-direction:column; gap:16px; text-align:left;">
-      <input type="hidden" name="_subject" value="💬 New contact form message — ExpenseSpy">
-      <input type="hidden" name="source" value="expensespy.com contact form">
       <input type="text" name="name" placeholder="Your name" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg);">
       <input type="email" name="email" placeholder="Your email" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg);">
       <textarea name="message" placeholder="Your message" rows="5" required style="font-family:'Inter',sans-serif; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border); font-size:15px; outline:none; color:var(--navy); background:var(--bg); resize:vertical;"></textarea>
